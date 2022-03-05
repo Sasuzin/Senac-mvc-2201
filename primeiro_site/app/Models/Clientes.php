@@ -10,8 +10,8 @@ class Clientes extends Model
     use HasFactory;
     protected $fillable = ['id', 'vendedor_id','cliente_id'];
 
-    public function compras()
+    public function produtos()
     {
-        return $this->hasMany(Vendas::class,'cliente_id');
+        return $this->hasMany(Vendas::class,'venda_id', 'id');
     }
 }

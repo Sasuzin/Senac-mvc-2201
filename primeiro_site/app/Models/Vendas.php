@@ -12,5 +12,19 @@ class Vendas extends Model
     protected $fillable = [ 'id',
                             'cliente_id',
                             'data_da_venda'];
-    protected $table = 'Vendas';                            
+    protected $table = 'Vendas';  
+    
+    public function clientes()
+    {
+        return $this->belongsTo(Clientes::class,'id');
+    }
+
+    public function Produtos()
+    {
+        return $this->hasMany(Produtos::class,'id');
+    }
+    public function NotaFiscal()
+    {
+        return $this->hasOne(NotasFiscais::class,'venda_id','id');
+    }
 }
