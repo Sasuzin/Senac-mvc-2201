@@ -1,3 +1,4 @@
+        <!-- As sintaxis do blade iniciam com @ -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
