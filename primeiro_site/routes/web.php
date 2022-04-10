@@ -1,39 +1,49 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
+//método get -> oferece a alguém fazer o get via browser
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/avisos', function(){
-    return view ('avisos', ['nome'=> 'Luis', 'mostrar'=>true, 'avisos'=>[['id'=> 1, 'aviso'=> 'BLA BLA BLA BLA BLA BLA'],
-                                                                        ['id'=> 2, 'aviso'=> 'Agora é hora de aventura'],
-                                                                        ['id'=> 3, 'aviso'=> 'A ordem dos fatores n muda bla bla bla']]]);
+
+Route::get('/avisos', function () {
+    return view('avisos', [
+        'nome' => 'Guilherme',
+        'mostrar' => true,
+        'avisos' => [
+            ['id' => 1, 'aviso' => 'Mussum Ipsum, cacilds vidis litro abertis.'],
+            ['id' => 2, 'aviso' => 'Todo mundo vê os porris que eu tomo, mas ninguém vê os tombis que eu levo!.'],
+            ['id' => 3, 'aviso' => 'Quem num gosta di mim que vai caçá sua turmis!.']
+        ]
+    ]);
 });
 
-Route::get('/notificaçao', function(){
-    return view ('notificaçao', ['nome'=> 'Luis Felipe', 'mostrar'=>true, 'notificaçao'=>[['id'=> 1, 'aviso'=> 'Não esqueça da autoescola Segunda'],
-                                                                        ['id'=> 2, 'aviso'=> 'Comece a Estudar mais'],
-                                                                        ['id'=> 3, 'aviso'=> 'Essa aula foi produtiva']]]);
+Route::get('/pi', function () {
+    return view('index', [
+        'nome' => 'Projeto PI 3º Semestre',
+        'mostrar' => true,
+        'avisos' => [
+            ['id' => 1, 'aviso' => 'E-Commerce de roupas e brinquedos de criança usados?'],
+            ['id' => 2, 'aviso' => 'E-commerce de tênis/roupas raras?'],
+            ['id' => 3, 'aviso' => 'Se vira ai man, penseeee']
+        ]
+    ]);
 });
-
-
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::prefix('clientes')->group(function(){
-Route::get('listar',[App\Http\Controllers\ClientesController::class ,'listar']);
+
+//prefix?? prefixo de um grupo de rotas
+Route::prefix('clientes')->group(function() {                   //  a diferença é que colocando aqui apenas
+                                                                //  algumas páginas da aplicação vai ser pedir login e senha
+    Route::get('listar', [App\Http\Controllers\ClientesController::class, 'listar'])->middleware('auth');
+});
+
+Route::group(['middleware' => ['auth']], function(){
+    Route::resource('/users', App\Http\Controllers\UserController::class);
+    Route::resource('/roles', App\Http\Controllers\UserController::class);
 });
