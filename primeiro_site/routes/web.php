@@ -17,26 +17,31 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/avisos', function (){
-    return view('avisos',[  'nome' => 'Albertin', 
-                            'mostrar' => true,
-                            'avisos' => [   ['id' => 1, 'aviso' => 'Mussum Ipsum, cacilds vidis litro abertis'],
-                                            ['id' => 2, 'aviso' => 'Em pé sem cair, deitado sem dormir'],
-                                            ['id' => 3, 'aviso' => 'A ordem dos tratores não altera o pão duris']]]);
+Route::get('/avisos', function(){
+    return view ('exercicio.avisos', ['nome'=> 'Matheus', 'mostrar'=>true, 'avisos'=>[['id'=> 1, 'aviso'=> 'BLA BLA BLA BLA BLA BLA'],
+                                                                        ['id'=> 2, 'aviso'=> 'Agora é hora de aventura'],
+                                                                        ['id'=> 3, 'aviso'=> 'A ordem dos fatores n muda bla bla bla']]]);
+});
+
+Route::get('/notificaçao', function(){
+    return view ('notificaçao', ['nome'=> 'Matheus Kross', 'mostrar'=>true, 'notificaçao'=>[['id'=> 1, 'aviso'=> 'Não esqueça da autoescola Segunda'],
+                                                                        ['id'=> 2, 'aviso'=> 'Comece a Estudar mais'],
+                                                                        ['id'=> 3, 'aviso'=> 'Essa aula foi produtiva']]]);
 });
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::prefix('clientes')->group(function (){
+Route::prefix('clientes')->group(function(){
 
-    Route::get('listar', 
-                    [App\Http\Controllers\ClientesController::class,'listar']
-                    )->middleware('auth');
+    Route::get('listar',
+        [App\Http\Controllers\ClientesController::class,'listar']
+        )->middleware('auth'); // quando chamar essa rota ele deve chamar o controller
 });
 
 Route::group(['middleware' => ['auth']], function(){
-    Route::resource('/users', App\Http\Controllers\UserController::class);
-    Route::resource('/roles', App\Http\Controllers\RoleController::class);    
+    Route::resource('/users', App\Http\Controllers\userController::class);
+    Route::resource('/roles', App\Http\Controllers\RoleController::class);
+    Route::resource('/clients',App\Http\Controllers\ClientesController::class);
+    // protegendo as rotas de autenticação
 });
-
