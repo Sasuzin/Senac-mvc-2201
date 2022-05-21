@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('v1')->group(static function(){
+
+    Route::get('/vendedores',[App\Http\Controller\vendedoresController::class,'index']);
+    Route::post('/vendedores', [App\Http\Controller\vendedoresController::class, 'store']);
+    Route::delete('/vendedores/{id}',[App\Http\Controller\vendedoresController::class,'destroy']);
+    Route::get('/vendedores/{id}',[App\Http\Controller\vendedoresController::class,'show']);
+    Route::put('/vendedores/{id}',[App\Http\Controller\vendedoresController::class,'update']);
+});
