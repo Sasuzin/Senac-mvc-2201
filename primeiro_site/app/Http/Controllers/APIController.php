@@ -15,6 +15,7 @@ class APIController extends Controller
     {
         $token = null;
         $campos_json = json_decode( $request->getContent(), JSON_OBJECT_AS_ARRAY);
+        return response()->json(['debug' => '']);
         $credenciais = ['email' => $campos_json['email'],
                         'password' => $campos_json['password']];
 
