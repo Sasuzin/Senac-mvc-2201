@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Vendedores;
 
-class vendedoresController extends Controller
+class VendedoresController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +35,9 @@ class vendedoresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $json = $request->getContent();
+
+        return Vendedores::create(json_decode($json, JSON_OBJECT_AS_ARRAY));
     }
 
     /**
@@ -51,7 +53,7 @@ class vendedoresController extends Controller
         if($vendedor){
             return $vendedor;
         }else{
-            return json_encode([$id=>'não existe']);
+            return json_encode([$id => 'nao existe']);
         }
     }
 
@@ -76,16 +78,16 @@ class vendedoresController extends Controller
     public function update(Request $request, $id)
     {
         $vendedor = Vendedores::find($id);
+
         if($vendedor){
             $json = $request->getContent();
-            $atualizacao = json_decode($json,JSON_OBEJCT_AS_ARRAY);
+            $atualizacao = json_decode($json, JSON_OBJECT_AS_ARRAY);
             $vendedor->nome = $atualizacao['nome'];
-            $ret = $vendedor->update() ? [$id => 'atulizado'] : [$id => 'erro']; 
-        }
-        else{
+            $ret = $vendedor->update() ? [$id => 'atualizado'] : [$id => 'erro'];
+        }else{
             $ret = [$id => 'nao existe'];
         }
-            return json_encode($ret);
+        return json_encode($ret);
     }
 
     /**
@@ -97,11 +99,31 @@ class vendedoresController extends Controller
     public function destroy($id)
     {
         $vendedor = Vendedores::find($id);
-            if($vendedor){
-                $ret = $vendedor->delete() ? [$id => 'apagado'] : [$id =>'erro'];
-            }else{
-                $ret = [$id => 'nao existe'];
-             } 
-             return json_encode($ret);
-            }
+        if($vendedor){
+            $ret = $vendedor->delete() ? [$id => 'apagado'] : [$id => 'erro'];
+        }else{
+            $ret = [$id => 'nao existe'];
+        }
+        return json_encode($ret);
+    }
+
+    public function checkVendedor(int $id):bool
+    {
+        $vendedores = [ 1 => 'Paulo',
+                        2 => 'Carla',
+                        3 => 'João',
+                        4 => 'Isonequex'];
+
+        return array_key_exists($id, $vendedores);
+    }
+
+    public function getVendedor(int $id):string
+    {
+        $vendedores = [ 1 => 'Paulo',
+                        2 => 'Carla',
+                        3 => 'João',
+                        4 => 'Isonequex'];
+
+        return $vendedores[$id];
+    }
 }
